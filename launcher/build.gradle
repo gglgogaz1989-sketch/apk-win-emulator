@@ -5,7 +5,6 @@ plugins {
 }
 
 dependencies {
-    // Подключаем наш модуль core
     implementation project(':core')
 }
 
@@ -18,11 +17,19 @@ application {
     mainClass = 'com.emulator.launcher.Main'
 }
 
-// Настройка для создания полноценного JAR файла
 jar {
+    // Фиксируем имя, чтобы сборщик .exe его сразу нашёл
+    archiveFileName = 'launcher.jar'
     manifest {
-        attributes(
-            'Main-Class': 'com.emulator.launcher.Main'
-        )
+        attributes('Main-Class': 'com.emulator.launcher.Main')
     }
 }
+
+// Скрипт, который копирует абсолютно все библиотеки приложения в одну папку для упаковки в .exe
+tasks.register('copyDependencies', Copy) {
+    dependsOn jar
+    from configurations.runtimeClasspath
+    from jar.archiveFile
+    into "${project.layout.buildDirectory.get().asFile}/libs"
+}
+build.dependsOn copyDependencies
