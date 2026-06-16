@@ -1,4 +1,4 @@
-name: Build APK Emulator
+name: Build APK Emulator EXE
 
 on:
   push:
@@ -8,7 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Меняем на Windows, чтобы собрать именно .exe
+    runs-on: windows-latest 
 
     steps:
     - name: Checkout code
@@ -20,14 +21,22 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Настройка Gradle
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    # Добавляем этот шаг, чтобы дать права на запуск
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-
-    # Теперь сборка точно запустится
-    - name: Build with Gradle
+    # Собираем проект и готовим папки
+    - name: Build Project
       run: ./gradlew build --no-daemon
+
+    # Встроенный инструмент Java собирает полноценный .exe лаунчера
+    - name: Package EXE
+      run: |
+        jpackage --type app-image --input launcher/build/libs --main-jar launcher.jar --main-class com.emulator.launcher.Main --dest dist --name "APKEmulator Launcher"
+      shell: bash
+
+    # Выкладываем готовую папку с .exe в артефакты GitHub
+    - name: Upload EXE Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows-APKEmulator-Launcher
+        path: dist/APKEmulator Launcher/
