@@ -20,14 +20,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    # Настройка Gradle и кэширования
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
 
+    # Просто проверяем, собирается ли проект целиком
     - name: Build with Gradle
-      run: ./gradlew build
-
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: emulator-launcher
-        path: launcher/build/libs/ # Путь, где будет лежать твой готовый JAR
+      run: ./gradlew build --no-daemon
