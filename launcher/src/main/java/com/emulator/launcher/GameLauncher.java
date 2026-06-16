@@ -1,4 +1,3 @@
-// launcher/src/main/java/com/emulator/launcher/GameLauncher.java
 package com.emulator.launcher;
 
 import com.emulator.core.GameConfig;
@@ -11,9 +10,9 @@ public class GameLauncher {
             // Передаем настройки через аргументы
             pb.command().addAll(java.util.Arrays.asList(config.toArgs()));
             
-            // Запускаем в новом окне
+            // Запускаем в новом окне (ИСПРАВЛЕНО: добавлен вызов метода скобками)
             Process process = pb.start();
-            System.out.println("Эмулятор запущен с настройками: " + config.resolution);
+            System.out.println("Эмулятор запущен с настройками: " + config.resolution());
             
         } catch (IOException e) {
             e.printStackTrace();
