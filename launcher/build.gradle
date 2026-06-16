@@ -5,14 +5,24 @@ plugins {
 }
 
 dependencies {
+    // Подключаем наш модуль core
     implementation project(':core')
 }
 
 javafx {
-    version = '19'
+    version = '17'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
 application {
     mainClass = 'com.emulator.launcher.Main'
+}
+
+// Настройка для создания полноценного JAR файла
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'com.emulator.launcher.Main'
+        )
+    }
 }
