@@ -1,1 +1,3 @@
-rootProject.name = 'apk-emulator-launcher'
+rootProject.name = 'apk-emulator'
+include 'core'
+include 'launcher'
